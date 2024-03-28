@@ -1,59 +1,118 @@
-from datetime import datetime, timezone
 from urllib.parse import urlsplit
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import login_user, logout_user, current_user, login_required
 import sqlalchemy as sa
+import requests
+from imdb import Cinemagoer
+from random import sample
 from main import app, db
-from main.forms import LoginForm, RegistrationForm, EditProfileForm, EmptyForm, PostForm, ResetPasswordRequestForm, ResetPasswordForm
-from main.models import User, Post
+from main.forms import LoginForm, RegistrationForm, EmptyForm, ResetPasswordRequestForm, ResetPasswordForm, SearchForm
+from main.models import User, Movie
 from main.email import send_password_reset_email
 
 
-@app.before_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.last_seen = datetime.now(timezone.utc)
-        db.session.commit()
-
-
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
-@login_required
+@app.route('/', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def index():
-    form = PostForm()
+    movie_list = {}
+    ia = Cinemagoer()
+    top_250_movies = ia.get_top250_movies()
+    random_10_movies = sample(top_250_movies, 10)
+    for movie in random_10_movies:
+        api_url = 'http://www.omdbapi.com/?apikey=b49eb448&t={}'.format(movie)
+        try:
+            response = requests.get(api_url)
+            if response.status_code == requests.codes.ok:
+                title = response.json()["Title"]
+                year = response.json()["Year"]
+                type = response.json()["Type"]
+                poster = response.json()["Poster"]
+                movie_list.update({title: [year, type, poster]})
+            else:
+                print("Error:", response.status_code, response.text)
+        except ConnectionError as e:
+            print("No internet connection!")
+    return render_template('index.html', title='Home', movies=movie_list)
+
+
+# PASS STUFF TO NAVBAR
+@app.context_processor
+def base():
+    form = SearchForm()
+    return dict(form=form)
+
+
+@app.route('/search', methods=['POST', 'GET'])
+def search():
+    page = request.args.get('page', 1, type=int)
+    form = SearchForm()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user)
-        db.session.add(post)
-        db.session.commit()
-        flash('Your post is now live!')
-        return redirect(url_for('index'))
-    page = request.args.get('page', 1, type=int)
-    posts = db.paginate(current_user.following_posts(), page=page,
-                        per_page=app.config['POSTS_PER_PAGE'], error_out=False)
-    next_url = url_for('index', page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('index', page=posts.prev_num) \
-        if posts.has_prev else None
-    return render_template('index.html', title='Home', form=form,
-                           posts=posts.items, next_url=next_url,
-                           prev_url=prev_url)
+        movie_list = {}
+        searched = form.searched.data
+        search_api_url = 'http://www.omdbapi.com/?apikey=b49eb448&s={}&page={}'.format(searched, page)
+
+        try:
+            response = requests.get(search_api_url)
+            if response.status_code == requests.codes.ok:
+                data = response.json()['Search']
+                for movie in data:
+                    title = movie['Title']
+                    year = movie['Year']
+                    poster = movie['Poster']
+                    type = movie['Type']
+                    movie_list.update({title: [year, type, poster]})
+            else:
+                print("Error:", response.status_code, response.text)
+        except ConnectionError as e:
+            print("No internet connection!")
+        except KeyError:
+            print(f"Movie {searched} doesn't exit!")
+
+        return render_template('search.html',
+                               form=form, searched=searched,
+                               title='Search', movies=movie_list)
 
 
-@app.route('/explore')
 @login_required
-def explore():
-    page = request.args.get('page', 1, type=int)
-    query = sa.select(Post).order_by(Post.timestamp.desc())
-    posts = db.paginate(query, page=page,
-                        per_page=app.config['POSTS_PER_PAGE'], error_out=False)
-    next_url = url_for('explore', page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('explore', page=posts.prev_num) \
-        if posts.has_prev else None
-    return render_template('index.html', title='Explore', posts=posts.items,
-                           next_url=next_url, prev_url=prev_url)
+@app.route('/collection', methods=['GET'])
+def collection():
+    movie_dict = []
+    movie_list = {}
+    movies = Movie.query.filter_by(add_user=current_user).all()
+    for movie in movies:
+        movie_dict.append(movie.title)
+    for movie in movie_dict:
+        api_url = 'http://www.omdbapi.com/?apikey=b49eb448&t={}'.format(movie)
+        try:
+            response = requests.get(api_url)
+            if response.status_code == requests.codes.ok:
+                title = response.json()["Title"]
+                year = response.json()["Year"]
+                type = response.json()["Type"]
+                poster = response.json()["Poster"]
+                movie_list.update({title: [year, type, poster]})
+            else:
+                print("Error:", response.status_code, response.text)
+        except ConnectionError as e:
+            print("No internet connection!")
+    return render_template('collection.html', title='Collection', movies=movie_list)
 
 
+@login_required
+@app.route('/add/<title>', methods=['POST'])
+def add(title):
+    user = current_user
+    movie = Movie.query.filter_by(title=title).first()
+    if movie:
+        return jsonify({'error': 'Movie already exists in the collection.'}), 400
+    movie = Movie(title=title, add_user=user)
+    db.session.add(movie)
+    db.session.commit()
+    flash('Movie add successfully!')
+    return redirect(url_for('index'))
+
+
+# SIGN UP, SIGN IN AND PASSWORD RESET -> (START)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -125,79 +184,4 @@ def reset_password(token):
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 
-
-@app.route('/user/<username>')
-@login_required
-def user(username):
-    user = db.first_or_404(sa.select(User).where(User.username == username))
-    page = request.args.get('page', 1, type=int)
-    query = user.posts.select().order_by(Post.timestamp.desc())
-    posts = db.paginate(query, page=page,
-                        per_page=app.config['POSTS_PER_PAGE'],
-                        error_out=False)
-    next_url = url_for('user', username=user.username, page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('user', username=user.username, page=posts.prev_num) \
-        if posts.has_prev else None
-    form = EmptyForm()
-    return render_template('user.html', user=user, posts=posts.items,
-                           next_url=next_url, prev_url=prev_url, form=form)
-
-
-@app.route('/edit_profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    form = EditProfileForm(current_user.username)
-    if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.about_me = form.about_me.data
-        db.session.commit()
-        flash('Your changes have been saved.')
-        return redirect(url_for('edit_profile'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Edit Profile',
-                           form=form)
-
-
-@app.route('/follow/<username>', methods=['POST'])
-@login_required
-def follow(username):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        user = db.session.scalar(
-            sa.select(User).where(User.username == username))
-        if user is None:
-            flash(f'User {username} not found.')
-            return redirect(url_for('index'))
-        if user == current_user:
-            flash('You cannot follow yourself!')
-            return redirect(url_for('user', username=username))
-        current_user.follow(user)
-        db.session.commit()
-        flash(f'You are following {username}!')
-        return redirect(url_for('user', username=username))
-    else:
-        return redirect(url_for('index'))
-
-
-@app.route('/unfollow/<username>', methods=['POST'])
-@login_required
-def unfollow(username):
-    form = EmptyForm()
-    if form.validate_on_submit():
-        user = db.session.scalar(
-            sa.select(User).where(User.username == username))
-        if user is None:
-            flash(f'User {username} not found.')
-            return redirect(url_for('index'))
-        if user == current_user:
-            flash('You cannot unfollow yourself!')
-            return redirect(url_for('user', username=username))
-        current_user.unfollow(user)
-        db.session.commit()
-        flash(f'You are not following {username}.')
-        return redirect(url_for('user', username=username))
-    else:
-        return redirect(url_for('index'))
+# SIGN UP, SIGN IN AND PASSWORD RESET -> (END)

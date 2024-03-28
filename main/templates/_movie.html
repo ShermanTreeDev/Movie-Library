@@ -1,0 +1,11 @@
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="{{ attribute[2] }}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{ title }} ({{ attribute[0] }}) </h5>
+      <p class="card-text">Type: {{ attribute[1] }} </p>
+        <form action="{{ url_for('add', title=title) }}" method="post">
+            <input type="hidden" name="title" value="{{ title }}">
+            <button type="submit" class="btn btn-primary">Add to collection</button>
+        </form>
+    </div>
+</div>

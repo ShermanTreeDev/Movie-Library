@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <h1>Your result for: {{ searched }}</h1>
+        {% for title, attribute in movies.items() %}
+            {% include '_movie.html' %}
+        {% endfor %}
+        <a href="{{ url_for('search', page =- 1) }}">Previous</a>
+        <a href="{{ url_for('search', page =+ 1) }}">Next</a>
+    </div>
+
+
+
+{% endblock %}
