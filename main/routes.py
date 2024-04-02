@@ -6,7 +6,7 @@ import requests
 from imdb import Cinemagoer
 from random import sample
 from main import app, db
-from main.forms import LoginForm, RegistrationForm, EmptyForm, ResetPasswordRequestForm, ResetPasswordForm, SearchForm
+from main.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, SearchForm
 from main.models import User, Movie
 from main.email import send_password_reset_email
 
