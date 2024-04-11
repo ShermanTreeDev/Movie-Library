@@ -1,4 +1,22 @@
-2024-04-09 11:33:06,500 ERROR: Exception on /add/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
+2024-04-01 15:00:37,516 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 08:38:40,472 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 08:40:49,062 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 08:41:06,821 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 08:45:16,332 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 08:51:20,833 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 08:53:55,219 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 08:55:03,507 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 08:55:18,161 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:11:22,719 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:14:49,575 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:14:55,205 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:15:32,247 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:16:14,800 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:16:32,277 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:17:32,110 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:18:58,397 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:25:30,794 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:25:31,322 ERROR: Exception on /add/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
 Traceback (most recent call last):
   File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 1463, in wsgi_app
     response = self.full_dispatch_request()
@@ -36,7 +54,7 @@ Traceback (most recent call last):
     instance_state(child),
     ^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'AnonymousUserMixin' object has no attribute '_sa_instance_state'
-2024-04-09 11:33:06,696 ERROR: Exception on /delete/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
+2024-04-09 11:25:31,601 ERROR: Exception on /delete/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
 Traceback (most recent call last):
   File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 1463, in wsgi_app
     response = self.full_dispatch_request()
@@ -69,3 +87,42 @@ Traceback (most recent call last):
   File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1185, in _optimized_compare
     raise sa_exc.ArgumentError(
 sqlalchemy.exc.ArgumentError: Mapped instance expected for relationship comparison to object.   Classes, queries and other SQL elements are not accepted in this context; for comparison with a subquery, use Movie.add_user.has(**criteria).
+2024-04-09 11:29:20,233 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:29:20,690 ERROR: Exception on /add/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
+Traceback (most recent call last):
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\main\routes.py", line 123, in add
+    movie = Movie(title=title, add_user=current_user)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 4, in __init__
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\state.py", line 564, in _initialize_instance
+    with util.safe_reraise():
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\state.py", line 562, in _initialize_instance
+    manager.original_init(*mixed[1:], **kwargs)
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\decl_base.py", line 2142, in _declarative_constructor
+    setattr(self, k, kwargs[k])
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\attributes.py", line 537, in __set__
+    self.impl.set(
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1467, in set
+    value = self.fire_replace_event(state, dict_, value, old, initiator)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1506, in fire_replace_event
+    value = fn(
+            ^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\attributes.py", line 2161, in emit_backref_from_scalar_set_event
+    instance_state(child),
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AnonymousUserMixin' object has no attribute '_sa_instance_state'

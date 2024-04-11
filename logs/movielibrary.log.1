@@ -1,4 +1,38 @@
-2024-04-09 11:33:06,500 ERROR: Exception on /add/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
+2024-04-09 11:29:20,920 ERROR: Exception on /delete/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
+Traceback (most recent call last):
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\main\routes.py", line 134, in delete
+    movie = Movie.query.filter_by(title=title, add_user=current_user).first()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\query.py", line 1983, in filter_by
+    clauses = [
+              ^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\query.py", line 1984, in <listcomp>
+    _entity_namespace_key(from_entity, key) == value
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\sql\operators.py", line 582, in __eq__
+    return self.operate(eq, other)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\attributes.py", line 453, in operate
+    return op(self.comparator, *other, **kwargs)  # type: ignore[no-any-return]  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\relationships.py", line 762, in __eq__
+    self.property._optimized_compare(
+  File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1185, in _optimized_compare
+    raise sa_exc.ArgumentError(
+sqlalchemy.exc.ArgumentError: Mapped instance expected for relationship comparison to object.   Classes, queries and other SQL elements are not accepted in this context; for comparison with a subquery, use Movie.add_user.has(**criteria).
+2024-04-09 11:32:19,031 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]
+2024-04-09 11:32:19,381 ERROR: Exception on /add/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
 Traceback (most recent call last):
   File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 1463, in wsgi_app
     response = self.full_dispatch_request()
@@ -36,7 +70,7 @@ Traceback (most recent call last):
     instance_state(child),
     ^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'AnonymousUserMixin' object has no attribute '_sa_instance_state'
-2024-04-09 11:33:06,696 ERROR: Exception on /delete/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
+2024-04-09 11:32:19,591 ERROR: Exception on /delete/Inception [POST] [in D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py:828]
 Traceback (most recent call last):
   File "D:\Projects\Movie-Library\env\Lib\site-packages\flask\app.py", line 1463, in wsgi_app
     response = self.full_dispatch_request()
@@ -69,3 +103,4 @@ Traceback (most recent call last):
   File "D:\Projects\Movie-Library\env\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1185, in _optimized_compare
     raise sa_exc.ArgumentError(
 sqlalchemy.exc.ArgumentError: Mapped instance expected for relationship comparison to object.   Classes, queries and other SQL elements are not accepted in this context; for comparison with a subquery, use Movie.add_user.has(**criteria).
+2024-04-09 11:33:06,111 INFO: MovieLibrary startup [in D:\Projects\Movie-Library\main\__init__.py:45]

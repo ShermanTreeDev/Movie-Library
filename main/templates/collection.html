@@ -6,7 +6,23 @@
         {% for title, attribute in movies.items() %}
             {% include '_movie.html' %}
         {% endfor %}
-        <a href="{{ url_for('search', page =- 1) }}">Previous</a>
-        <a href="{{ url_for('search', page =+ 1) }}">Next</a>
+        <nav aria-label="Page navigation example" class="mt-3">
+            <ul class="pagination justify-content-center">
+                {% if page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('collection', page=page-1) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo; Previous</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if page < total_pages %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('collection', page=page+1) }}" aria-label="Next">
+                        <span aria-hidden="true">Next &raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 {% endblock %}

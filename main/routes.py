@@ -27,7 +27,11 @@ def index():
                 year = response.json()["Year"]
                 type = response.json()["Type"]
                 poster = response.json()["Poster"]
-                movie_list.update({title: [year, type, poster]})
+                if current_user.is_authenticated:
+                    is_in_collection = Movie.query.filter_by(title=title, add_user=current_user).first() is not None
+                else:
+                    is_in_collection = False
+                movie_list.update({title: [year, type, poster, is_in_collection]})
             else:
                 print("Error:", response.status_code, response.text)
         except ConnectionError as e:
@@ -60,7 +64,11 @@ def search():
                     year = movie['Year']
                     poster = movie['Poster']
                     type = movie['Type']
-                    movie_list.update({title: [year, type, poster]})
+                    if current_user.is_authenticated:
+                        is_in_collection = Movie.query.filter_by(title=title, add_user=current_user).first() is not None
+                    else:
+                        is_in_collection = False
+                    movie_list.update({title: [year, type, poster, is_in_collection]})
             else:
                 print("Error:", response.status_code, response.text)
         except ConnectionError as e:
@@ -76,12 +84,17 @@ def search():
 @login_required
 @app.route('/collection', methods=['GET'])
 def collection():
+    page = request.args.get('page', 1, type=int)
+    per_page = 8
+    movies = Movie.query.filter_by(add_user=current_user).all()
     movie_dict = []
     movie_list = {}
-    movies = Movie.query.filter_by(add_user=current_user).all()
     for movie in movies:
         movie_dict.append(movie.title)
-    for movie in movie_dict:
+    start = (page - 1) * per_page
+    end = start + per_page
+    movie_dict_slice = movie_dict[start:end]
+    for movie in movie_dict_slice:
         api_url = 'http://www.omdbapi.com/?apikey=b49eb448&t={}'.format(movie)
         try:
             response = requests.get(api_url)
@@ -90,26 +103,42 @@ def collection():
                 year = response.json()["Year"]
                 type = response.json()["Type"]
                 poster = response.json()["Poster"]
-                movie_list.update({title: [year, type, poster]})
+                is_in_collection = True
+                movie_list.update({title: [year, type, poster, is_in_collection]})
             else:
                 print("Error:", response.status_code, response.text)
         except ConnectionError as e:
             print("No internet connection!")
-    return render_template('collection.html', title='Collection', movies=movie_list)
+    total_pages = len(movie_dict) // per_page + (1 if len(movie_dict) % per_page > 0 else 0)
+    return render_template('collection.html', title='Collection', movies=movie_list, page=page, total_pages=total_pages)
 
 
+# ADDING MOIVE TO USER DATABASE
 @login_required
 @app.route('/add/<title>', methods=['POST'])
 def add(title):
-    user = current_user
     movie = Movie.query.filter_by(title=title).first()
     if movie:
         return jsonify({'error': 'Movie already exists in the collection.'}), 400
-    movie = Movie(title=title, add_user=user)
+    movie = Movie(title=title, add_user=current_user)
     db.session.add(movie)
     db.session.commit()
     flash('Movie add successfully!')
     return redirect(url_for('index'))
+
+
+# DELETE SELECT USER MOVIE OUT OF THEIR DATABASE
+@login_required
+@app.route('/delete/<title>', methods=['POST'])
+def delete(title):
+    movie = Movie.query.filter_by(title=title, add_user=current_user).first()
+    if not movie:
+        flash('Movie not found in your collection.', 'error')
+        return redirect(url_for('collection'))
+    db.session.delete(movie)
+    db.session.commit()
+    flash('Movie deleted successfully!')
+    return redirect(url_for('collection'))
 
 
 # SIGN UP, SIGN IN AND PASSWORD RESET -> (START)
