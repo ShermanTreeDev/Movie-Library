@@ -8,6 +8,19 @@ A web application that allows users to manage a collection of movies. Also one o
 - Using OMDbAPI to fetch data so you would need to collect your own API key in order to work.
 - Project comes with a password reset feature for users that forget their password. You require to modify the application's SMTP configuration.
 
+## Register and Login
+![Register and Login](https://github.com/CallMeTree/Movie-Library/assets/101957534/116338ee-f2b7-4e1c-a585-7dcfcb824062)
+
+## Add and Remove
+![Add and Remove](https://github.com/CallMeTree/Movie-Library/assets/101957534/cc0dfcf0-df1a-4044-9489-369bda7068a3)
+
+
+##Search
+![Search](https://github.com/CallMeTree/Movie-Library/assets/101957534/1cf27aa9-8c8e-4192-a8dd-de861055ebf1)
+
+
+
+
 ## Setup and Installation
 
 Install my-project with npm
