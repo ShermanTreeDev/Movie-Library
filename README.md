@@ -39,6 +39,14 @@ Create virtual environment
   python3 -m venv env
 ```
 
+Run virtual environment
+
+```bash
+    source env/bin/activate
+    env\Scripts\activate (Microsoft Windows cmd)
+    env\Scripts\Activate.ps1 or env/Scritps/activate (Powershell)
+```
+
 Install my-project with npm
 
 ```bash
