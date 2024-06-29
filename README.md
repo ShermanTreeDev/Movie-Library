@@ -51,4 +51,7 @@ Start the server
   flask run
 ```
 
+## Database Migration
+For any detail, follow this structure https://github.com/miguelgrinberg/flask-migrate
+
 Next you will need to put your own API and email variable. Good luck :3
