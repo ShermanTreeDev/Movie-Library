@@ -1,4 +1,4 @@
-#!D:\Projects\Movie-Library\env\Scripts\python.exe
+#!D:\Work\Movie-Library\env\Scripts\python.exe
 # -*- coding: utf-8 -*-
 """
 get_first_movie.py

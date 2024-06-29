@@ -26,7 +26,7 @@ if not app.debug:
             secure = ()
         mail_handler = SMTPHandler(
             mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
-            fromaddr='lequoctri0302@icloud.com',
+            fromaddr='YourEmailAdd@email.com', #--> Put your email address in here
             toaddrs=app.config['ADMINS'], subject='MovieLibrary Failure',
             credentials=auth, secure=secure)
         mail_handler.setLevel(logging.ERROR)

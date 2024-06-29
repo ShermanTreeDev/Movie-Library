@@ -11,6 +11,7 @@ from main.models import User, Movie
 from main.email import send_password_reset_email
 
 
+
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
 def index():
@@ -19,7 +20,7 @@ def index():
     top_250_movies = ia.get_top250_movies()
     random_10_movies = sample(top_250_movies, 10)
     for movie in random_10_movies:
-        api_url = 'http://www.omdbapi.com/?apikey=b49eb448&t={}'.format(movie)
+        api_url = '{}t={}'.format(app.config['OMDB_API'], movie)
         try:
             response = requests.get(api_url)
             if response.status_code == requests.codes.ok:
@@ -53,7 +54,7 @@ def search():
     if form.validate_on_submit():
         movie_list = {}
         searched = form.searched.data
-        search_api_url = 'http://www.omdbapi.com/?apikey=b49eb448&s={}&page={}'.format(searched, page)
+        search_api_url = '{}s={}&page={}'.format(app.config['OMDB_API'], searched, page)
 
         try:
             response = requests.get(search_api_url)
@@ -95,7 +96,7 @@ def collection():
     end = start + per_page
     movie_dict_slice = movie_dict[start:end]
     for movie in movie_dict_slice:
-        api_url = 'http://www.omdbapi.com/?apikey=b49eb448&t={}'.format(movie)
+        api_url = '{}t={}'.format(app.config['OMDB_API'], movie)
         try:
             response = requests.get(api_url)
             if response.status_code == requests.codes.ok:
