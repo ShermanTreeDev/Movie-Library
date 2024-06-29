@@ -15,27 +15,16 @@ A web application that allows users to manage a collection of movies. Also one o
 ![Add and Remove](https://github.com/CallMeTree/Movie-Library/assets/101957534/cc0dfcf0-df1a-4044-9489-369bda7068a3)
 
 
-##Search
+## Search
 ![Search](https://github.com/CallMeTree/Movie-Library/assets/101957534/1cf27aa9-8c8e-4192-a8dd-de861055ebf1)
 
-
-
-
-## Setup and Installation
-
-Install my-project with npm
-
-```bash
-  npm install my-project
-  cd my-project
-```
     
-## Run Locally
+## Setup, Installation and Run Locally
 
 Clone the project
 
 ```bash
-  git clone https://github.com/CallMeTree/Movie-Library.git
+  git clone https://github.com/ShermanTreeDev/Movie-Library.git
 ```
 
 Go to the project directory
@@ -44,11 +33,16 @@ Go to the project directory
   cd Movie-Library
 ```
 
-Active virtual environment
+Create virtual environment
 
 ```bash
-  env/Scrripts/active (For PowerShell)
-  env\Scripts\Activate.ps1 (For CMD)
+  python3 -m venv env
+```
+
+Install my-project with npm
+
+```bash
+  pip install -r requirements.txt
 ```
 
 Start the server
@@ -57,3 +51,4 @@ Start the server
   flask run
 ```
 
+Next you will need to put your own API and email variable. Good luck :3
