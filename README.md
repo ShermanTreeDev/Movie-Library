@@ -9,16 +9,14 @@ A web application that allows users to manage a collection of movies. Also one o
 - Project comes with a password reset feature for users that forget their password. You require to modify the application's SMTP configuration.
 
 ## Register and Login
-![Register and Login](https://github.com/CallMeTree/Movie-Library/assets/101957534/116338ee-f2b7-4e1c-a585-7dcfcb824062)
+![Register](https://github.com/user-attachments/assets/bab3496d-e321-49cc-8f92-7720feedf079)
 
 ## Add and Remove
-![Add and Remove](https://github.com/CallMeTree/Movie-Library/assets/101957534/cc0dfcf0-df1a-4044-9489-369bda7068a3)
-
+![Add and remove](https://github.com/user-attachments/assets/7b1c1596-2ef8-415f-b4e3-1679460237bb)
 
 ## Search
-![Search](https://github.com/CallMeTree/Movie-Library/assets/101957534/1cf27aa9-8c8e-4192-a8dd-de861055ebf1)
+![Search](https://github.com/user-attachments/assets/18b59ea5-c1ff-48cf-b283-f3df01189f97)
 
-    
 ## Setup, Installation and Run Locally
 
 Clone the project
