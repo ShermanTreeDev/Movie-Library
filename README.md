@@ -45,7 +45,7 @@ Run virtual environment
     env\Scripts\Activate.ps1 or env/Scritps/activate (Powershell)
 ```
 
-Install my-project with npm
+Install my-project with pip
 
 ```bash
   pip install -r requirements.txt
